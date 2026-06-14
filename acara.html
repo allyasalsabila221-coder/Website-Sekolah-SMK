@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acara & Kegiatan - SMK Al-Hikmah Kalirejo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(26, 77, 140, 0.95);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+
+        .logo h1 i {
+            color: #ffd700;
+            margin-right: 8px;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffd700;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 100%;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #1a4d8c, #0e2d52);
+            color: #fff;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Filter Section */
+        .filter-section {
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border: none;
+            background: #fff;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+            transform: translateY(-2px);
+        }
+
+        /* Event Grid */
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .event-card {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .event-image {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .event-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .event-card:hover .event-image img {
+            transform: scale(1.1);
+        }
+
+        .event-date-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ffd700;
+            color: #1a4d8c;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .event-category {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+        }
+
+        .event-content {
+            padding: 20px;
+        }
+
+        .event-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #1a4d8c;
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .event-meta i {
+            color: #ffd700;
+            margin-right: 5px;
+        }
+
+        .event-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .btn-readmore {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #1a4d8c;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .btn-readmore:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+        }
+
+        /* Upcoming Events Highlight */
+        .upcoming-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 60px 0;
+        }
+
+        .upcoming-banner {
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            color: #1a4d8c;
+        }
+
+        .upcoming-banner h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .countdown-item {
+            background: rgba(26, 77, 140, 0.9);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            min-width: 80px;
+        }
+
+        .countdown-item span {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        /* Modal for Event Detail */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            max-width: 600px;
+            width: 90%;
+            border-radius: 15px;
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            background: #1a4d8c;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-body img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 40px 0 20px;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .footer-section p {
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+            .countdown {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <h1><i class="fas fa-school"></i> SMK AL-HIKMAH</h1>
+                <p>Berdiri Kuat, Melayani dengan Hati | Terakreditasi B</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="acara.html" class="active">Acara</a></li>
+                    <li><a href="artikel.html">Artikel</a></li>
+                    <li><a href="sambutan-kepsek.html">Tentang Kami</a></li>
+                    <li><a href="foto.html">Galeri</a></li>
+                    <li><a href="kontak.html">Kontak</a></li>
+                    <li><a href="ekstrakurikuler.html">Ekstrakurikuler</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-calendar-alt"></i> Acara & Kegiatan</h1>
+            <p>Berbagai kegiatan seru dan bermanfaat di SMK Al-Hikmah Kalirejo</p>
+        </div>
+    </section>
+
+    <section class="filter-section">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Semua Acara</button>
+                <button class="filter-btn" data-filter="upcoming">Akan Datang</button>
+                <button class="filter-btn" data-filter="past">Sudah Berlalu</button>
+                <button class="filter-btn" data-filter="important">Acara Penting</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="event-grid" id="eventGrid">
+            <!-- Acara akan ditampilkan melalui JavaScript -->
+        </div>
+    </section>
+
+    <!-- Upcoming Events Banner -->
+    <section class="upcoming-section">
+        <div class="container">
+            <div class="upcoming-banner">
+                <h3><i class="fas fa-clock"></i> Acara Mendatang</h3>
+                <p>Jangan lewatkan acara seru yang akan datang di SMK Al-Hikmah!</p>
+                <div class="countdown" id="countdown">
+                    <div class="countdown-item"><span id="days">00</span> Hari</div>
+                    <div class="countdown-item"><span id="hours">00</span> Jam</div>
+                    <div class="countdown-item"><span id="minutes">00</span> Menit</div>
+                    <div class="countdown-item"><span id="seconds">00</span> Detik</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Detail Acara -->
+    <div class="modal" id="eventModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detail Acara</h3>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Detail acara akan diisi via JS -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>SMK Al-Hikmah Kalirejo</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Jl Raya Sridadi KM.05 Kalirejo, Lampung Tengah</p>
+                    <p><i class="fas fa-phone"></i> +62 851-8810-0432</p>
+                    <p><i class="fas fa-envelope"></i> admin@smk-alhikmah-kalirejo.sch.id</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Link Cepat</h4>
+                    <p><a href="acara.html" style="color: white; text-decoration: none;">→ Acara Sekolah</a></p>
+                    <p><a href="artikel.html" style="color: white; text-decoration: none;">→ Artikel & Berita</a></p>
+                    <p><a href="ekstrakurikuler.html" style="color: white; text-decoration: none;">→ Ekstrakurikuler</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Ikuti Kami</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 SMK Al-Hikmah Kalirejo. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data Acara (Foto bisa diganti dengan mengubah URL gambar)
+        const events = [
+            {
+                id: 1,
+                title: "IMPLEMENTASI SENAM ANAK INDONESIA SEHAT",
+                date: "2025-02-08",
+                time: "07:30 - 08:00",
+                location: "Halaman Utama SMK Al-Hikmah Kalirejo",
+                category: "past",
+                type: "Kesehatan",
+                description: "Kegiatan senam bersama seluruh siswa dan guru SMK Al-Hikmah dalam rangka implementasi program Senam Anak Indonesia Sehat. Kegiatan ini bertujuan untuk meningkatkan kesehatan dan kebugaran seluruh warga sekolah.",
+                image: "https://smk-alhikmah-kalirejo.sch.id/file/acara/400_1739364354_1609aab91da57f762985.jpeg",
+                fullDescription: "Kegiatan senam massal yang diikuti oleh seluruh siswa, guru, dan staff SMK Al-Hikmah Kalirejo. Acara ini merupakan implementasi dari program pemerintah tentang Gerakan Masyarakat Hidup Sehat. Selain senam, juga diadakan pemeriksaan kesehatan gratis dan sarapan sehat bersama."
+            },
+            {
+                id: 2,
+                title: "Pelepasan Peserta Didik Kelas XII T.P 2025",
+                date: "2025-03-15",
+                time: "08:00 - 12:00",
+                location: "Aula SMK Al-Hikmah Kalirejo",
+                category: "past",
+                type: "Akademik",
+                description: "Acara pelepasan siswa kelas XII yang telah menyelesaikan pendidikan. Dihadiri oleh orang tua, guru, dan perwakilan dari Dinas Pendidikan.",
+                image: "https://i.ytimg.com/vi/1aBHZAHDE9A/maxresdefault.jpg",
+                fullDescription: "Acara perpisahan dan pelepasan siswa kelas XII tahun pelajaran 2024/2025. Acara ini diisi dengan sambutan dari kepala sekolah, perwakilan siswa, serta hiburan dari siswa kelas X dan XI. Dihadiri oleh 256 siswa yang akan lulus."
+            },
+            {
+                id: 3,
+                title: "Gelar Karya & Job Fair 2025",
+                date: "2025-04-22",
+                time: "09:00 - 15:00",
+                location: "Halaman SMK Al-Hikmah Kalirejo",
+                category: "upcoming",
+                type: "Karir",
+                description: "Pameran hasil karya siswa dan job fair bersama perusahaan-perusahaan mitra. Kesempatan emas untuk siswa mendapatkan pekerjaan.",
+                image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEigkpctKPTevxfCSEULWvKD5HUk3XCx14Sz1eHj4cPW-ltbkNhCeaHPlIFDh-z9R4ON3Pb1eCTuU8Rc7Z_s27GnB5A43y-Tz6dws3oY1jjrTcpmCjIb0fWVIBoYPNNSj5KIjtYYrMzPaZbl/s1600/20141017_094901.jpg",
+                fullDescription: "Gelar Karya menampilkan hasil karya siswa dari berbagai jurusan. Job Fair diikuti oleh 15 perusahaan nasional dan lokal. Siswa bisa langsung interview dan mendapatkan tawaran pekerjaan."
+            },
+            {
+                id: 4,
+                title: "Lolos Seleksi Paskibra Tingkat Kabupaten Lampung Tengah",
+                date: "2025-05-10",
+                time: "08:00 - 16:00",
+                location: "SMK Al-Hikmah Kalirejo",
+                category: "upcoming",
+                type: "Kompetisi",
+                description: "Lolos Seleksi Paskibra siswa SMK se-Kabupaten Lampung Tengah dalam berbagai bidang keahlian.",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAw9lFZ-CrbnTAvhOUc9EZ6HJlommgyAXJsA&s",
+                fullDescription: "Lolos Seleksi Paskibra Tingkat Kabupaten Lampung Tengah, menajdi perwakilan SMK AL-HIMAH KALIREJO mengibarkan bendera merah putih ditingkat kabupaten lampung tengah."
+            },
+            {
+                id: 5,
+                title: "Class Meeting & Pentas Seni",
+                date: "2025-06-20",
+                time: "07:30 - 14:00",
+                location: "Lapangan SMK Al-Hikmah",
+                category: "upcoming",
+                type: "Seni & Olahraga",
+                description: "Kegiatan class meeting antar kelas dan pentas seni siswa dalam rangka mengisi liburan semester.",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb-Xf5050DwNpFh_bEKjKlaiBcF8_Aau5CfQ&s",
+                fullDescription: "Class meeting meliputi lomba futsal, voli, dan badminton. Pentas seni menampilkan bakat siswa dalam bidang musik, tari, dan drama. Kegiatan ini untuk mengisi waktu sebelum liburan semester ganjil."
+            },
+            {
+                id: 6,
+                title: "Peringatan Hari Kemerdekaan RI",
+                date: "2025-08-17",
+                time: "07:00 - 12:00",
+                location: "Halaman SMK Al-Hikmah",
+                category: "upcoming",
+                type: "Nasional",
+                description: "Upacara peringatan HUT RI ke-80 dan berbagai lomba tradisional.",
+                image: "https://i.ytimg.com/vi/EYU9O8oR3kg/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGEcgVihlMA8=&rs=AOn4CLBl3M6s2I6g-d8fbI5OIT2jAKlQaw",
+                fullDescription: "Peringatan Hari Kemerdekaan RI ke-80 akan diisi dengan upacara bendera, lomba-lomba tradisional (balap karung, panjat pinang, makan kerupuk), serta pentas seni budaya."
+            }
+        ];
+
+        let currentFilter = "all";
+
+        function renderEvents() {
+            const filteredEvents = currentFilter === "all" 
+                ? events 
+                : events.filter(event => event.category === currentFilter);
+            
+            const eventGrid = document.getElementById("eventGrid");
+            eventGrid.innerHTML = "";
+            
+            filteredEvents.forEach(event => {
+                const eventCard = document.createElement("div");
+                eventCard.className = "event-card";
+                eventCard.onclick = () => showEventDetail(event);
+                
+                eventCard.innerHTML = `
+                    <div class="event-image">
+                        <img src="${event.image}" alt="${event.title}">
+                        <div class="event-date-badge">
+                            <i class="fas fa-calendar"></i> ${new Date(event.date).toLocaleDateString('id-ID')}
+                        </div>
+                        <div class="event-category">
+                            <i class="fas fa-tag"></i> ${event.type}
+                        </div>
+                    </div>
+                    <div class="event-content">
+                        <h3>${event.title}</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-clock"></i> ${event.time}</span>
+                            <span><i class="fas fa-map-marker-alt"></i> ${event.location.split(",")[0]}</span>
+                        </div>
+                        <p class="event-description">${event.description.substring(0, 100)}...</p>
+                        <button class="btn-readmore">Selengkapnya <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                `;
+                eventGrid.appendChild(eventCard);
+            });
+        }
+
+        function showEventDetail(event) {
+            const modal = document.getElementById("eventModal");
+            const modalBody = document.getElementById("modalBody");
+            
+            modalBody.innerHTML = `
+                <img src="${event.image}" alt="${event.title}">
+                <h3 style="color:#1a4d8c; margin-bottom:10px;">${event.title}</h3>
+                <div style="margin-bottom:15px;">
+                    <p><i class="fas fa-calendar" style="color:#ffd700;"></i> ${new Date(event.date).toLocaleDateString('id-ID', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</p>
+                    <p><i class="fas fa-clock" style="color:#ffd700;"></i> ${event.time}</p>
+                    <p><i class="fas fa-map-marker-alt" style="color:#ffd700;"></i> ${event.location}</p>
+                    <p><i class="fas fa-tag" style="color:#ffd700;"></i> ${event.type}</p>
+                </div>
+                <hr style="margin:15px 0;">
+                <p>${event.fullDescription}</p>
+                <div style="margin-top:20px;">
+                    <button class="btn-readmore" onclick="closeModal()">Tutup</button>
+                </div>
+            `;
+            
+            modal.classList.add("active");
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("eventModal");
+            modal.classList.remove("active");
+        }
+
+        // Countdown Timer untuk event terdekat
+        function updateCountdown() {
+            const upcomingEvents = events.filter(e => e.category === "upcoming");
+            if (upcomingEvents.length > 0) {
+                const nextEvent = upcomingEvents.sort((a,b) => new Date(a.date) - new Date(b.date))[0];
+                const targetDate = new Date(nextEvent.date).getTime();
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
+                document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
+                document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
+            }
+        }
+
+        // Event Listeners
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                currentFilter = btn.getAttribute("data-filter");
+                renderEvents();
+            });
+        });
+
+        document.querySelector(".modal-close").addEventListener("click", closeModal);
+        document.getElementById("eventModal").addEventListener("click", (e) => {
+            if (e.target === document.getElementById("eventModal")) closeModal();
+        });
+
+        // Initial render
+        renderEvents();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMK Al-Hikmah Kalirejo - Sekolah Teknologi Unggulan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+        /* Background Manager */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            transition: all 0.5s ease;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        /* Background Control Panel */
+        .bg-control-panel {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 18px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .bg-control-panel:hover {
+            transform: scale(1.02);
+        }
+
+        .bg-control-panel span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a4d8c;
+            margin-right: 5px;
+        }
+
+        .bg-option {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .bg-option.active {
+            border-color: #ffd700;
+            transform: scale(1.15);
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(26, 77, 140, 0.95);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .logo h1 i {
+            color: #ffd700;
+            margin-right: 8px;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffd700;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 100%;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section - Like Screenshot */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            color: #fff;
+            padding: 100px 0;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero h2 span {
+            color: #ffd700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h2 span::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 215, 0, 0.3);
+            z-index: -1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            line-height: 1.8;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            color: #1a4d8c;
+            padding: 14px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #ffd700;
+            color: #ffd700;
+        }
+
+        .btn-outline:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+        }
+
+        /* Wave Divider */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .wave svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 80px;
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .section-white {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .section-gray {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: #1a4d8c;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            border-radius: 2px;
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            color: #ffd700;
+            margin-top: 25px;
+        }
+
+        .card h3 {
+            margin: 20px 20px 10px;
+            color: #1a4d8c;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            padding: 0 20px 25px;
+            color: #666;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: linear-gradient(135deg, #1a4d8c, #0e2d52);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            text-align: center;
+            padding: 70px 0;
+            color: white;
+        }
+
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Announcement Banner */
+        .announcement {
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            color: #1a4d8c;
+            padding: 12px 0;
+            text-align: center;
+            font-weight: bold;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .announcement-content {
+            display: inline-block;
+            animation: scrollText 20s linear infinite;
+        }
+
+        @keyframes scrollText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .announcement i {
+            margin-right: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: #ffd700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: #ffd700;
+        }
+
+        .footer-section p {
+            margin-bottom: 12px;
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .footer-section i {
+            margin-right: 10px;
+            color: #ffd700;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 45px;
+            height: 45px;
+            background: #ffd700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a4d8c;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: #ffed4a;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero h2 {
+                font-size: 2rem;
+            }
+            .hero-subtitle {
+                font-size: 1.3rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .bg-control-panel {
+                bottom: 15px;
+                right: 15px;
+                padding: 8px 12px;
+            }
+            .bg-option {
+                width: 28px;
+                height: 28px;
+            }
+            .btn-group {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Manager -->
+    <div class="bg-container" id="bgContainer"></div>
+    <div class="bg-overlay"></div>
+    
+    <!-- Background Control Panel -->
+    <div class="bg-control-panel">
+        <span><i class="fas fa-palette"></i> Ganti BG</span>
+        <div class="bg-option active" data-bg="1" style="background: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200') center/cover;"></div>
+        <div class="bg-option" data-bg="2" style="background: url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200') center/cover;"></div>
+        <div class="bg-option" data-bg="3" style="background: url('https://images.unsplash.com/photo-1562774053-701939374585?w=1200') center/cover;"></div>
+        <div class="bg-option" data-bg="4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+        <div class="bg-option" data-bg="5" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+    </div>
+
+    <!-- Announcement Banner -->
+    <div class="announcement">
+        <div class="announcement-content">
+            <i class="fas fa-megaphone"></i>  PENERIMAAN PESERTA DIDIK BARU TAHUN AJARAN 2025/2026 TELAH DIBUKA! Daftarkan segera!  | DISKON 20% UNTUK 50 PENDAFTAR PERTAMA! 
+        </div>
+    </div>
+
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <h1><i class="fas fa-school"></i> SMK AL-HIKMAH</h1>
+                <p>Berdiri Kuat, Melayani dengan Hati | Terakreditasi B</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Beranda</a></li>
+                    <li><a href="acara.html">Acara</a></li>
+                    <li><a href="artikel.html">Artikel</a></li>
+                    <li><a href="sambutan-kepsek.html">Tentang Kami</a></li>
+                    <li><a href="foto.html">Galeri</a></li>
+                    <li><a href="kontak.html">Kontak</a></li>
+                    <li><a href="ekstrakurikuler.html">Ekstrakurikuler</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section - Like Screenshot Request -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i> SMK FAVORIT & BERPRESTASI
+                </div>
+                <h2>SELAMAT DATANG DI <span>WEBSITE KAMI</span></h2>
+                <div class="hero-subtitle">
+                    <i class="fas fa-graduation-cap"></i> SEKOLAH FAVORIT DAN SEKOLAH TEKNOLOGI
+                </div>
+                <p>
+                    <i class="fas fa-check-circle" style="color: #ffd700;"></i> <strong>DISIPLIN ADALAH NAFAS KAMI</strong><br>
+                    SMK Al-Hikmah Kalirejo hadir sebagai pusat pendidikan teknologi terdepan dengan kurikulum modern, 
+                    fasilitas lengkap, dan tenaga pengajar profesional. Siap mencetak generasi unggul yang kompeten 
+                    di era industri 4.0.
+                </p>
+                <div class="btn-group">
+                    <a href="kontak.html" class="btn"><i class="fas fa-paper-plane"></i> Selengkapnya</a>
+                    <a href="foto.html" class="btn btn-outline"><i class="fas fa-images"></i> Galeri Kami</a>
+                </div>
+            </div>
+        </div>
+        <div class="wave">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="#ffffff" fill-opacity="1" d="M0,192L48,197.3C96,203,192,213,288,208C384,203,480,181,576,186.7C672,192,768,224,864,229.3C960,235,1056,213,1152,192C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Keunggulan Section -->
+    <section class="section section-white">
+        <div class="container">
+            <h3 class="section-title"> Keunggulan Sekolah Kami </h3>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-microchip"></i></div>
+                    <h3>Sistem Smart School</h3>
+                    <p>Pembelajaran berbasis teknologi terkini dengan sistem digital, e-learning, dan smart classroom. Siswa lebih aktif dan kreatif dalam proses belajar.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-certificate"></i></div>
+                    <h3>Terakreditasi B</h3>
+                    <p>Kualitas pembelajaran terbaik dengan peralatan praktik lengkap dan terbaru. Siap bersaing dalam dunia industri modern.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-futbol"></i></div>
+                    <h3>Ekstrakurikuler Lengkap</h3>
+                    <p>Lebih dari 15 ekstrakurikuler untuk mengembangkan minat dan bakat siswa, dari olahraga hingga seni dan teknologi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jurusan Section -->
+    <section class="section section-gray">
+        <div class="container">
+            <h3 class="section-title"> Jurusan Unggulan Kami </h3>
+            <div class="card-grid">
+                <div class="card">
+                    <img src="https://smk-alhikmah-kalirejo.sch.id/file/jurusan/400_1736749661_d5c7a86ad6e89c90fd01.png" alt="TKR" class="card-img">
+                    <h3><i class="fas fa-car"></i> Teknik Kendaraan Ringan (TKR)</h3>
+                    <p>Dibimbing oleh instruktur berpengalaman. Siswa dilatih menjadi ahli perbaikan kendaraan ringan yang handal dan profesional.</p>
+                    <p><strong><i class="fas fa-user-tie"></i> DWI BUDI SANTOSO S.T</strong></p>
+                </div>
+                <div class="card">
+                    <img src="https://smk-alhikmah-kalirejo.sch.id/file/jurusan/400_1769697773_b74355cb5ca36a3a56b2.png" alt="TSM" class="card-img">
+                    <h3><i class="fas fa-motorcycle"></i> Teknik Sepeda Motor (TSM)</h3>
+                    <p>Di TSM, kita tidak hanya belajar memutar kunci pas, tetapijuga belajar meyetel masa depan yang presisi.</p>
+                    <p><strong><i class="fas fa-user-tie"></i> MILIA RAHMAN S.T</strong></p>
+                </div>
+                <div class="card">
+                    <img src="https://smk-alhikmah-kalirejo.sch.id/file/jurusan/400_1769697873_0c6437e689228975b3b8.png" alt="TAV" class="card-img">
+                    <h3><i class="fas fa-video"></i> Teknik Komputer & Jaringan (TKJ)</h3>
+                    <p>Jemari boleh sibuk mengetik baris kode, tapi fokus mata tetap lurus menatap masa depan sukses.</p>
+                    <p><strong><i class="fas fa-user-tie"></i> DEDI KURNIAWAN S.KOM</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <div class="stats">
+        <div class="stat-item">
+            <h3><i class="fas fa-chalkboard-user"></i> 56+</h3>
+            <p>Staff & Guru Profesional</p>
+        </div>
+        <div class="stat-item">
+            <h3><i class="fas fa-users"></i> 768+</h3>
+            <p>Siswa Aktif</p>
+        </div>
+        <div class="stat-item">
+            <h3><i class="fas fa-door-open"></i> 26</h3>
+            <p>Kelas Belajar</p>
+        </div>
+        <div class="stat-item">
+            <h3><i class="fas fa-trophy"></i> 3</h3>
+            <p>Penghargaan Nasional</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-school"></i> SMK Al-Hikmah</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Jl Raya Sridadi KM.05 Kalirejo, Kec. Kalirejo, Kab. Lampung Tengah</p>
+                    <p><i class="fas fa-phone"></i> +62 851-8810-0432</p>
+                    <p><i class="fas fa-envelope"></i> admin@smk-alhikmah-kalirejo.sch.id</p>
+                    <p><i class="fas fa-clock"></i> Senin - Jumat: 07.00 - 16.00 WIB</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Link Cepat</h4>
+                    <p><a href="acara.html" style="color: white; text-decoration: none;"><i class="fas fa-chevron-right"></i> Acara Sekolah</a></p>
+                    <p><a href="artikel.html" style="color: white; text-decoration: none;"><i class="fas fa-chevron-right"></i> Artikel & Berita</a></p>
+                    <p><a href="ekstrakurikuler.html" style="color: white; text-decoration: none;"><i class="fas fa-chevron-right"></i> Ekstrakurikuler</a></p>
+                    <p><a href="kontak.html" style="color: white; text-decoration: none;"><i class="fas fa-chevron-right"></i> Hubungi Kami</a></p>
+                    <p><a href="foto.html" style="color: white; text-decoration: none;"><i class="fas fa-chevron-right"></i> Galeri Foto</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Ikuti Kami</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                    <p style="margin-top: 20px;"><i class="fas fa-quote-left"></i> Bergabunglah dengan keluarga besar SMK Al-Hikmah untuk masa depan cerah!</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 SMK Al-Hikmah Kalirejo. All Rights Reserved. | <i class="fas fa-heart" style="color: #ffd700;"></i> Membangun Generasi Unggul Berkarakter</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script>
+        // Background Manager - Bisa diganti kapan saja
+        const bgContainer = document.getElementById('bgContainer');
+        const bgOptions = document.querySelectorAll('.bg-option');
+        
+        // Background options array
+        const bgImages = [
+            'url(https://dfrayent.wordpress.com/wp-content/uploads/2014/11/1ed2copy.jpg) center/cover',
+            'url(https://smk-alhikmah-kalirejo.sch.id/file/galeri/1769659024_e8bc14b240768913262e.jpeg) center/cover',
+            'url(https://smk-alhikmah-kalirejo.sch.id/file/artikel/500/1739365932_799ab9598b4a4596bde2.jpeg) center/cover',
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+        ];
+        
+        function changeBackground(index) {
+            bgContainer.style.background = bgImages[index];
+            bgContainer.style.backgroundSize = 'cover';
+            bgContainer.style.backgroundPosition = 'center';
+        }
+        
+        // Set default background
+        bgContainer.style.background = 'url(https://radarlampung.disway.id/upload/3337f67e001de0701cb5f79327f8e301.jpg) center/cover';
+        bgContainer.style.backgroundSize = 'cover';
+        
+        // Event listener untuk tombol ganti background
+        bgOptions.forEach((option, idx) => {
+            option.addEventListener('click', () => {
+                bgOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                changeBackground(idx);
+            });
+        });
+        
+        // Back to Top Button
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+        
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.card, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

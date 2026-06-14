@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Foto - SMK Al-Hikmah Kalirejo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        /* Background Manager */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            transition: all 0.5s ease;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.94);
+            z-index: -1;
+        }
+
+        /* Background Control Panel */
+        .bg-control-panel {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: flex;
+            gap: 8px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .bg-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .bg-option.active {
+            border-color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(26, 77, 140, 0.95);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+
+        .logo h1 i {
+            color: #ffd700;
+            margin-right: 8px;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffd700;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 100%;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #1a4d8c, #0e2d52);
+            color: #fff;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: #e9ecef;
+            padding: 12px 0;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb a {
+            color: #1a4d8c;
+            text-decoration: none;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border: none;
+            background: #fff;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+            transform: translateY(-2px);
+        }
+
+        /* Gallery Grid */
+        .gallery-section {
+            padding: 20px 0 60px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: #fff;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-overlay h4 {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .gallery-overlay p {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* Lightbox Modal */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox-content img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #fff;
+            padding: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .lightbox-close:hover {
+            color: #ffd700;
+        }
+
+        .lightbox-prev,
+        .lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            color: #fff;
+            cursor: pointer;
+            padding: 15px;
+            transition: color 0.3s;
+        }
+
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            color: #ffd700;
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: #e9ecef;
+            padding: 40px 0;
+            margin-top: 40px;
+            border-radius: 20px;
+        }
+
+        .upload-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .upload-card h3 {
+            color: #1a4d8c;
+            margin-bottom: 15px;
+        }
+
+        .upload-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .upload-btn {
+            background: #1a4d8c;
+            color: #fff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 40px 0 20px;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .footer-section p {
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .footer-section a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            color: #ffd700;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            nav ul {
+                justify-content: center;
+            }
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+            }
+            .lightbox-prev,
+            .lightbox-next {
+                font-size: 1.5rem;
+                padding: 10px;
+            }
+            .bg-control-panel {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Manager -->
+    <div class="bg-container" id="bgContainer"></div>
+    <div class="bg-overlay"></div>
+    
+    <!-- Background Control Panel -->
+    <div class="bg-control-panel">
+        <div class="bg-option active" data-bg="1" style="background: #f8f9fa;"></div>
+        <div class="bg-option" data-bg="2" style="background: #e8f4f8;"></div>
+        <div class="bg-option" data-bg="3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+        <div class="bg-option" data-bg="4" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+    </div>
+
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <h1><i class="fas fa-school"></i> SMK AL-HIKMAH</h1>
+                <p>Berdiri Kuat, Melayani dengan Hati | Terakreditasi B</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="acara.html">Acara</a></li>
+                    <li><a href="artikel.html">Artikel</a></li>
+                    <li><a href="sambutan-kepsek.html">Tentang Kami</a></li>
+                    <li><a href="foto.html" class="active">Galeri</a></li>
+                    <li><a href="kontak.html">Kontak</a></li>
+                    <li><a href="ekstrakurikuler.html">Ekstrakurikuler</a></li>
+                    <li><a href="#"><i class="fas fa-vote-yea"></i> E-VOTING</a></li>
+                    <li><a href="#"><i class="fas fa-graduation-cap"></i> KELULUSAN 2026</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-images"></i> Galeri Foto Kami</h1>
+            <p>Dokumentasi kegiatan dan prestasi SMK Al-Hikmah Kalirejo</p>
+        </div>
+    </section>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="index.html">Home</a> / <a href="#">Galeri</a> / <span style="color:#1a4d8c;">Foto Kegiatan</span>
+        </div>
+    </div>
+
+    <section class="filter-section">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Semua Foto</button>
+                <button class="filter-btn" data-filter="acara">Acara Sekolah</button>
+                <button class="filter-btn" data-filter="ekskul">Ekstrakurikuler</button>
+                <button class="filter-btn" data-filter="prestasi">Prestasi</button>
+                <button class="filter-btn" data-filter="fasilitas">Fasilitas</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery-section">
+        <div class="container">
+            <div class="gallery-grid" id="galleryContainer">
+                <!-- Foto akan ditampilkan dari JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Foto Section (Admin Only) -->
+    <section class="upload-section">
+        <div class="container">
+            <div class="upload-card">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ffd700; margin-bottom: 15px;"></i>
+                <h3>Tambah Foto Kegiatan</h3>
+                <p>Upload foto kegiatan sekolah untuk ditampilkan di galeri</p>
+                <input type="file" id="uploadInput" class="upload-input" accept="image/*" multiple>
+                <button class="upload-btn" onclick="document.getElementById('uploadInput').click()">
+                    <i class="fas fa-plus"></i> Pilih Foto
+                </button>
+                <p style="font-size: 0.75rem; margin-top: 10px;">*Foto akan tersimpan sementara di browser</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <span class="lightbox-prev"><i class="fas fa-chevron-left"></i></span>
+        <span class="lightbox-next"><i class="fas fa-chevron-right"></i></span>
+        <div class="lightbox-content">
+            <img id="lightboxImg" src="" alt="">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>SMK Al-Hikmah Kalirejo</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Jl Raya Sridadi KM.05 Kalirejo, Lampung Tengah</p>
+                    <p><i class="fas fa-phone"></i> +62 851-8810-0432</p>
+                    <p><i class="fas fa-envelope"></i> admin@smk-alhikmah-kalirejo.sch.id</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Link Cepat</h4>
+                    <p><a href="acara.html">→ Acara Sekolah</a></p>
+                    <p><a href="artikel.html">→ Artikel & Berita</a></p>
+                    <p><a href="ekstrakurikuler.html">→ Ekstrakurikuler</a></p>
+                    <p><a href="kontak.html">→ Hubungi Kami</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Ikuti Kami</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                    <p style="margin-top: 15px;">Follow Instagram: @smkalhikmah_official</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 SMK Al-Hikmah Kalirejo. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data Galeri Foto (Ganti sesuai kebutuhan)
+        let galleryData = [
+            {
+                id: 1,
+                src: "https://i.ytimg.com/vi/EYU9O8oR3kg/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGEcgVihlMA8=&rs=AOn4CLBl3M6s2I6g-d8fbI5OIT2jAKlQaw",
+                title: "Upacara Bendera HUT RI",
+                category: "acara",
+                description: "Kegiatan upacara bendera dalam rangka HUT Kemerdekaan RI"
+            },
+            {
+                id: 2,
+                src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_9exsGPOZYMNGX66BlfHn6jksF4eIGSLq0Q&s",
+                title: "Kegiatan Belajar Mengajar",
+                category: "fasilitas",
+                description: "Suasana belajar siswa di dalam kelas"
+            },
+            {
+                id: 3,
+                src: "https://smk-alhikmah-kalirejo.sch.id/file/galeri/1769698676_b0451fd06b7256b3aa3e.jpg",
+                title: "Praktik Bengkel TKR",
+                category: "fasilitas",
+                description: "Siswa jurusan TKR sedang melakukan praktik perbaikan mesin"
+            },
+            {
+                id: 4,
+                src: "https://smk-alhikmah-kalirejo.sch.id/file/galeri/1769698691_5f9ec3cbfbf47d5d7779.jpg",
+                title: "Praktik Bengkel TSM",
+                category: "fasilitas",
+                description: "Siswa jurusan TSM sedang melakukan praktik perbaikan mesin"
+            },
+            {
+                id: 5,
+                src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTf9lLbVyloGvPUG_tuvUTrT_rRaxJiO9loA&s",
+                title: "Teknik Komputer & Jaringan TKJ",
+                category: "fasilitas",
+                description: "Siswa jurusan TKJ sedang melakukan praktik jaringan komputer di laboratorium"
+            },
+            {
+                id: 6,
+                src: "https://smk-alhikmah-kalirejo.sch.id/file/galeri/1739363154_ede1d51ee0c4e7017dbe.jpeg",
+                title: "Senam Pagi Bersama",
+                category: "acara",
+                description: "Kegiatan senam pagi / memakai baju olahraga"
+            },
+            {
+                id: 8,
+                src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQlEn301EvMl2ONYUOLYnLmmL9g0b-3cIgGQ&s",
+                title: "Pentas Seni Siswa",
+                category: "ekskul",
+                description: "Penampilan seni tari dari siswa ekstrakurikuler"
+            },
+            {
+                id: 9,
+                src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnwK-j_1cKYVTm3BeAA2-wG7tQdNAnhVvU5Q&s",
+                title: "Juara Lomba Tari",
+                category: "prestasi",
+                description: "Tim tari SMK Al-Hikmah meraih "
+            },
+            {
+                id: 10,
+                src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvoBIf7sCeTl91R8ZY0173O4h5u2XJf13Ovw&s",
+                title: "Kegiatan upacra di hari senin",
+                category: "acara",
+                description: "Kegiatan upacara di hari senin"
+            },
+            {
+                id: 10,
+                src: "https://smk-alhikmah-kalirejo.sch.id/file/galeri/1769698958_36f8e18600dc49f631ee.jpeg",
+                title: "Kegiatan mengaji bersama",
+                category: "acara",
+                description: "Kegiatan mengaji bersama saat bulan ramadhan"
+            },
+            {
+                id: 10,
+                src: "https://smk-alhikmah-kalirejo.sch.id/file/galeri/1769698814_ce8f146249da5e687e8f.jpeg",
+                title: "Kegiatan hadroh",
+                category: "acara",
+                description: "Kegiatan sosial hadroh saat bulan ramadhan"
+            },
+            {
+                id: 10,
+                src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbbGWFt7qAzZ0GQi_-oHARKmFYtGOoSSwvYg&s",
+                title: "Kegiatan Bagi-Bagi Takjil",
+                category: "acara",
+                description: "Kegiatan sosial bagi-bagi takjil kepada masyarakat sekitar saat bulan ramadhan"
+            },
+            {
+                id: 11,
+                src: "https://smk-alhikmah-kalirejo.sch.id/file/galeri/1769699191_db4294df58429fefa06c.jpeg",
+                title: "Kunjungan Industri",
+                category: "acara",
+                description: "Study tour ke rumah jonglong "
+            },
+            {
+                id: 12,
+                src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp-XXxraPLAGeRlweVHr6tX8BZU0ZKCB9eOQ&s",
+                title: "Praktik Membuat Mobil Listrik",
+                category: "ekskul",
+                description: "Ekstrakurikuler sedang merakit mobil listrik jurusan TKR"
+            },
+            {
+                id: 13,
+                src: "https://cdn.antaranews.com/cache/1200x800/2024/08/29/20240829_125523.jpg",
+                title: "Perpustakaan Digital",
+                category: "fasilitas",
+                description: "Fasilitas perpustakaan digital sekolah"
+            },
+            {
+                id: 14,
+                src: "https://smk-alhikmah-kalirejo.sch.id/file/galeri/1739363375_2b6df61071440390af46.jpeg",
+                title: "Kegiatan",
+                category: "Momen",
+                description: "Foto bersama siswa dan guru"
+            },
+            {
+                id: 15,
+                src: "https://i.ytimg.com/vi/1aBHZAHDE9A/maxresdefault.jpg",
+                title: "Wisuda Kelas XII",
+                category: "acara",
+                description: "Acara pelepasan siswa kelas XII"
+            }
+        ];
+
+        let currentFilter = "all";
+        let currentLightboxIndex = 0;
+        let filteredData = [];
+
+        // Load data dari localStorage jika ada
+        function loadFromStorage() {
+            const saved = localStorage.getItem('galleryData');
+            if (saved) {
+                galleryData = JSON.parse(saved);
+            }
+        }
+
+        // Simpan ke localStorage
+        function saveToStorage() {
+            localStorage.setItem('galleryData', JSON.stringify(galleryData));
+        }
+
+        // Render Gallery
+        function renderGallery() {
+            filteredData = currentFilter === "all" 
+                ? galleryData 
+                : galleryData.filter(item => item.category === currentFilter);
+            
+            const container = document.getElementById("galleryContainer");
+            container.innerHTML = "";
+            
+            if (filteredData.length === 0) {
+                container.innerHTML = '<div class="no-results"><i class="fas fa-camera" style="font-size: 3rem; margin-bottom: 10px;"></i><p>Belum ada foto dalam kategori ini</p><p>Silakan upload foto baru!</p></div>';
+                return;
+            }
+            
+            filteredData.forEach((item, index) => {
+                const galleryItem = document.createElement("div");
+                galleryItem.className = "gallery-item";
+                galleryItem.setAttribute("data-id", item.id);
+                galleryItem.onclick = () => openLightbox(index);
+                
+                galleryItem.innerHTML = `
+                    <img src="${item.src}" alt="${item.title}">
+                    <div class="gallery-overlay">
+                        <h4><i class="fas fa-camera"></i> ${item.title}</h4>
+                        <p><i class="fas fa-tag"></i> ${getCategoryName(item.category)}</p>
+                        <p><i class="fas fa-info-circle"></i> ${item.description.substring(0, 60)}${item.description.length > 60 ? '...' : ''}</p>
+                    </div>
+                `;
+                container.appendChild(galleryItem);
+            });
+        }
+        
+        function getCategoryName(category) {
+            const names = {
+                'acara': 'Acara Sekolah',
+                'ekskul': 'Ekstrakurikuler',
+                'prestasi': 'Prestasi',
+                'fasilitas': 'Fasilitas'
+            };
+            return names[category] || category;
+        }
+        
+        // Lightbox functions
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            const lightbox = document.getElementById("lightbox");
+            const img = document.getElementById("lightboxImg");
+            const caption = document.getElementById("lightboxCaption");
+            const item = filteredData[index];
+            
+            img.src = item.src;
+            caption.innerHTML = `<strong>${item.title}</strong><br>${item.description}`;
+            lightbox.classList.add("active");
+        }
+        
+        function closeLightbox() {
+            document.getElementById("lightbox").classList.remove("active");
+        }
+        
+        function prevImage() {
+            currentLightboxIndex = (currentLightboxIndex - 1 + filteredData.length) % filteredData.length;
+            const img = document.getElementById("lightboxImg");
+            const caption = document.getElementById("lightboxCaption");
+            const item = filteredData[currentLightboxIndex];
+            img.src = item.src;
+            caption.innerHTML = `<strong>${item.title}</strong><br>${item.description}`;
+        }
+        
+        function nextImage() {
+            currentLightboxIndex = (currentLightboxIndex + 1) % filteredData.length;
+            const img = document.getElementById("lightboxImg");
+            const caption = document.getElementById("lightboxCaption");
+            const item = filteredData[currentLightboxIndex];
+            img.src = item.src;
+            caption.innerHTML = `<strong>${item.title}</strong><br>${item.description}`;
+        }
+        
+        // Upload foto baru
+        function setupUpload() {
+            const uploadInput = document.getElementById("uploadInput");
+            uploadInput.addEventListener("change", function(e) {
+                const files = Array.from(e.target.files);
+                files.forEach(file => {
+                    if (file.type.startsWith("image/")) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const newId = galleryData.length + 1;
+                            const newPhoto = {
+                                id: newId,
+                                src: event.target.result,
+                                title: prompt("Masukkan judul foto:", "Foto Baru"),
+                                category: prompt("Kategori (acara/ekskul/prestasi/fasilitas):", "acara"),
+                                description: prompt("Deskripsi foto:", "Kegiatan di SMK Al-Hikmah Kalirejo")
+                            };
+                            if (newPhoto.title && newPhoto.category) {
+                                galleryData.push(newPhoto);
+                                saveToStorage();
+                                renderGallery();
+                                alert("Foto berhasil ditambahkan!");
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert("File bukan gambar!");
+                    }
+                });
+                uploadInput.value = "";
+            });
+        }
+        
+        // Background Manager
+        const bgContainer = document.getElementById('bgContainer');
+        const bgOptions = document.querySelectorAll('.bg-option');
+        const bgImages = [
+            '#f8f9fa',
+            '#e8f4f8',
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+        ];
+        
+        function changeBackground(index) {
+            bgContainer.style.background = bgImages[index];
+        }
+        
+        bgOptions.forEach((option, idx) => {
+            option.addEventListener('click', () => {
+                bgOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                changeBackground(idx);
+            });
+        });
+        
+        // Event Listeners
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                currentFilter = btn.getAttribute("data-filter");
+                renderGallery();
+            });
+        });
+        
+        document.querySelector(".lightbox-close").addEventListener("click", closeLightbox);
+        document.querySelector(".lightbox-prev").addEventListener("click", prevImage);
+        document.querySelector(".lightbox-next").addEventListener("click", nextImage);
+        document.getElementById("lightbox").addEventListener("click", (e) => {
+            if (e.target === document.getElementById("lightbox")) closeLightbox();
+        });
+        
+        // Keyboard navigation
+        document.addEventListener("keydown", (e) => {
+            if (document.getElementById("lightbox").classList.contains("active")) {
+                if (e.key === "Escape") closeLightbox();
+                if (e.key === "ArrowLeft") prevImage();
+                if (e.key === "ArrowRight") nextImage();
+            }
+        });
+        
+        // Initialize
+        loadFromStorage();
+        renderGallery();
+        setupUpload();
+    </script>
+</body>
+</html>

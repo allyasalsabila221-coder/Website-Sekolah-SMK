@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekstrakurikuler - SMK Al-Hikmah Kalirejo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        /* Background Manager */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            transition: all 0.5s ease;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.94);
+            z-index: -1;
+        }
+
+        /* Background Control Panel */
+        .bg-control-panel {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: flex;
+            gap: 8px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .bg-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .bg-option.active {
+            border-color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(26, 77, 140, 0.95);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+
+        .logo h1 i {
+            color: #ffd700;
+            margin-right: 8px;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffd700;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 100%;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #1a4d8c, #0e2d52);
+            color: #fff;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: #e9ecef;
+            padding: 12px 0;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb a {
+            color: #1a4d8c;
+            text-decoration: none;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border: none;
+            background: #fff;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+            transform: translateY(-2px);
+        }
+
+        /* Ekskul Grid */
+        .ekskul-section {
+            padding: 20px 0 60px;
+        }
+
+        .ekskul-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .ekskul-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .ekskul-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .ekskul-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .ekskul-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .ekskul-card:hover .ekskul-image img {
+            transform: scale(1.1);
+        }
+
+        .ekskul-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ffd700;
+            color: #1a4d8c;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .ekskul-content {
+            padding: 20px;
+        }
+
+        .ekskul-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #1a4d8c;
+        }
+
+        .ekskul-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .ekskul-meta i {
+            color: #ffd700;
+            margin-right: 5px;
+        }
+
+        .ekskul-desc {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .ekskul-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-detail {
+            padding: 8px 20px;
+            background: #1a4d8c;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .btn-detail:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+        }
+
+        .prestasi-icon {
+            color: #ffd700;
+            font-size: 0.9rem;
+        }
+
+        /* Modal Detail */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            max-width: 600px;
+            width: 90%;
+            border-radius: 20px;
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            background: #1a4d8c;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-body img {
+            width: 100%;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-body h3 {
+            color: #1a4d8c;
+            margin-bottom: 10px;
+        }
+
+        .modal-info {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .modal-info i {
+            color: #ffd700;
+            margin-right: 5px;
+        }
+
+        /* Stats Section */
+        .stats-ekskul {
+            background: linear-gradient(135deg, #1a4d8c, #0e2d52);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            text-align: center;
+            padding: 50px 0;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .stat-item h3 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 40px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .footer-section p {
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .footer-section a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            color: #ffd700;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            nav ul {
+                justify-content: center;
+            }
+            .ekskul-grid {
+                grid-template-columns: 1fr;
+            }
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            .bg-control-panel {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Manager -->
+    <div class="bg-container" id="bgContainer"></div>
+    <div class="bg-overlay"></div>
+    
+    <!-- Background Control Panel -->
+    <div class="bg-control-panel">
+        <div class="bg-option active" data-bg="1" style="background: #f8f9fa;"></div>
+        <div class="bg-option" data-bg="2" style="background: #e8f4f8;"></div>
+        <div class="bg-option" data-bg="3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+        <div class="bg-option" data-bg="4" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+    </div>
+
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <h1><i class="fas fa-school"></i> SMK AL-HIKMAH</h1>
+                <p>Berdiri Kuat, Melayani dengan Hati | Terakreditasi B</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="acara.html">Acara</a></li>
+                    <li><a href="artikel.html">Artikel</a></li>
+                    <li><a href="sambutan-kepsek.html">Tentang Kami</a></li>
+                    <li><a href="foto.html">Galeri</a></li>
+                    <li><a href="kontak.html">Kontak</a></li>
+                    <li><a href="ekstrakurikuler.html" class="active">Ekstrakurikuler</a></li>
+                    <li><a href="#"><i class="fas fa-vote-yea"></i> E-VOTING</a></li>
+                    <li><a href="#"><i class="fas fa-graduation-cap"></i> KELULUSAN 2026</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-futbol"></i> Ekstrakurikuler</h1>
+            <p>Mengembangkan minat dan bakat siswa melalui berbagai kegiatan ekstrakurikuler</p>
+        </div>
+    </section>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="index.html">Home</a> / <span style="color:#1a4d8c;">Ekstrakurikuler</span>
+        </div>
+    </div>
+
+    <section class="filter-section">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Semua Ekskul</button>
+                <button class="filter-btn" data-filter="olahraga">Olahraga</button>
+                <button class="filter-btn" data-filter="seni">Seni & Budaya</button>
+                <button class="filter-btn" data-filter="keagamaan">Keagamaan</button>
+                <button class="filter-btn" data-filter="teknologi">Teknologi</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="ekskul-section">
+        <div class="container">
+            <div class="ekskul-grid" id="ekskulContainer">
+                <!-- Ekstrakurikuler akan ditampilkan via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistik Ekstrakurikuler -->
+    <div class="stats-ekskul">
+        <div class="stat-item">
+            <h3><i class="fas fa-users"></i> 12+</h3>
+            <p>Ekskul Aktif</p>
+        </div>
+        <div class="stat-item">
+            <h3><i class="fas fa-trophy"></i> 25+</h3>
+            <p>Prestasi Nasional</p>
+        </div>
+        <div class="stat-item">
+            <h3><i class="fas fa-user-graduate"></i> 500+</h3>
+            <p>Siswa Aktif</p>
+        </div>
+        <div class="stat-item">
+            <h3><i class="fas fa-chalkboard-user"></i> 15+</h3>
+            <p>Pembina Profesional</p>
+        </div>
+    </div>
+
+    <!-- Modal Detail -->
+    <div class="modal" id="ekskulModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detail Ekstrakurikuler</h3>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Detail akan diisi via JS -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>SMK Al-Hikmah Kalirejo</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Jl Raya Sridadi KM.05 Kalirejo, Lampung Tengah</p>
+                    <p><i class="fas fa-phone"></i> +62 851-8810-0432</p>
+                    <p><i class="fas fa-envelope"></i> admin@smk-alhikmah-kalirejo.sch.id</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Link Cepat</h4>
+                    <p><a href="acara.html">→ Acara Sekolah</a></p>
+                    <p><a href="artikel.html">→ Artikel & Berita</a></p>
+                    <p><a href="ekstrakurikuler.html">→ Ekstrakurikuler</a></p>
+                    <p><a href="kontak.html">→ Hubungi Kami</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Ikuti Kami</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                    <p style="margin-top: 15px;">@smkalhikmah_ekskul</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 SMK Al-Hikmah Kalirejo. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data Ekstrakurikuler (Lengkap dengan foto, jadwal, prestasi, dll)
+        const ekskulData = [
+            {
+                id: 1,
+                name: "Paskibra",
+                category: "olahraga",
+                photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQz-j0ZiVjjKxwu3PMyQf4_CcGsDQ12hhR3zA&s",
+                schedule: "Jumat, 15:00 - 17:00",
+                coach: "Sertu Andi Setiawan",
+                prestasi: "Juara 2 LBB Paskibra Kabupaten 2024",
+                description: "Latihan baris-berbaris, kedisiplinan, dan pembentukan karakter. Anggota Paskibra SMK Al-Hikmah sering dipercaya menjadi petugas upacara di berbagai acara penting.",
+                fullDescription: "Paskibra SMK Al-Hikmah merupakan ekstrakurikuler unggulan yang fokus pada latihan baris-berbaris, kedisiplinan, dan pembentukan karakter kepemimpinan. Anggota Paskibra dilatih oleh pelatih profesional dari unsur TNI. Prestasi terbaru meraih Juara 2 Lomba Baris Berbaris (LBB) tingkat Kabupaten. Anggota juga aktif menjadi petugas upacara di acara hari besar nasional."
+            },
+            {
+                id: 2,
+                name: "Pramuka",
+                category: "olahraga",
+                photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVilICZ25Tvw8CzEACjQC0uVx5HGfTjRpBBQ&s",
+                schedule: "Sabtu, 13:00 - 16:00",
+                coach: "Kak Budi Santoso",
+                prestasi: "Juara Umum Jambore Cabang 2024",
+                description: "Kegiatan kepramukaan yang mengajarkan kemandirian, cinta alam, dan kepemimpinan. Aktif dalam perkemahan dan kegiatan sosial.",
+                fullDescription: "Pramuka SMK Al-Hikmah memiliki anggota aktif dari berbagai tingkatan. Kegiatan meliputi perkemahan, hiking, pionering, dan bakti sosial. Prestasi yang diraih antara lain Juara Umum Jambore Cabang tahun 2024. Anggota juga dilatih keterampilan survival dan kepemimpinan."
+            },
+            {
+                id: 3,
+                name: "Rohis (Rohani Islam)",
+                category: "keagamaan",
+                photo: "https://smk-alhikmah-kalirejo.sch.id/file/galeri/1769698958_36f8e18600dc49f631ee.jpeg",
+                schedule: "Kamis, 14:00 - 16:00",
+                coach: "Ustadz Ahmad Fikri, S.Ag",
+                prestasi: "Juara 1 MTQ Kecamatan 2024",
+                description: "Pengembangan spiritual dan keagamaan Islam. Kegiatan meliputi kajian rutin, tadarus, dan pelatihan dakwah.",
+                fullDescription: "Rohis (Rohani Islam) adalah wadah bagi siswa untuk mengembangkan spiritualitas dan pemahaman keagamaan. Kegiatan rutin meliputi kajian Islam, tadarus Al-Quran, pelatihan dakwah, dan peringatan hari besar Islam. Prestasi: Juara 1 Musabaqah Tilawatil Quran (MTQ) tingkat Kecamatan."
+            },
+            {
+                id: 4,
+                name: "kegiatan hadroh",
+                category: "kegiatan",
+                photo: "https://smk-alhikmah-kalirejo.sch.id/file/galeri/1769698814_ce8f146249da5e687e8f.jpeg",
+                schedule: "Kamis, 14:00 - 16:00",
+                coach: "Ustadz Ahmad Fikri, S.Ag",
+                prestasi: "Juara 1 MTQ Kecamatan 2024",
+                description: "Pengembangan spiritual dan keagamaan Islam. Kegiatan meliputi kajian rutin, tadarus, dan pelatihan dakwah.",
+                fullDescription: "Rohis (Rohani Islam) adalah wadah bagi siswa untuk mengembangkan spiritualitas dan pemahaman keagamaan. Kegiatan rutin meliputi kajian Islam, tadarus Al-Quran, pelatihan dakwah, dan peringatan hari besar Islam. Prestasi: Juara 1 Musabaqah Tilawatil Quran (MTQ) tingkat Kecamatan."
+            },
+            {
+                id: 5,
+                name: "UKS (Usaha Kesehatan Sekolah)",
+                category: "olahraga",
+                photo: "https://lh4.googleusercontent.com/proxy/fXpoQRotSDKrSO5ZHfnuQeL3Ee8ishF0ve0DUDMSmTehwbIFCDdlrHKI_AcaHQjHmvsrMX4BPXpv2_rpmmNpUePfi838UbL_U5QyE0_iENyWJMsSWF7i1Bst",
+                schedule: "Senin, 14:00 - 15:30",
+                coach: "dr. Siti Aminah",
+                prestasi: "Juara 1 Lomba UKS Kabupaten",
+                description: "Pendidikan kesehatan, P3K, dan hidup sehat. Anggota dilatih menjadi kader kesehatan sekolah.",
+                fullDescription: "UKS bertujuan membina kesehatan siswa dan lingkungan sekolah. Anggota dilatih pertolongan pertama pada kecelakaan (P3K), penyuluhan kesehatan, dan menjadi kader kesehatan. Prestasi meraih Juara 1 Lomba UKS tingkat Kabupaten tahun 2024."
+            },
+            {
+                id: 6,
+                name: "Volly Ball",
+                category: "olahraga",
+                photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo9AKSD5bq7kmnaRfbdoeMxw06YkdVqX-Ceg&s",
+                schedule: "Selasa & Kamis, 15:30 - 17:30",
+                coach: "Eko Prasetyo, S.Pd",
+                prestasi: "Juara 2 Voli Cup Lampung Tengah",
+                description: "Latihan teknik dasar voli, strategi permainan, dan kerjasama tim.",
+                fullDescription: "Ekstrakurikuler Volly Ball membina bakat siswa dalam olahraga bola voli. Latihan rutin meliputi teknik dasar, strategi, dan pembentukan tim. Prestasi terbaru: Juara 2 dalam Turnamen Voli Cup se-Kabupaten Lampung Tengah."
+            },
+            {
+                id: 6,
+                name: "Futsal",
+                category: "olahraga",
+                photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSa_vaXpsJ6gApjL8brmpMu8hIaZltFM1A8kA&s",
+                schedule: "Rabu & Jumat, 15:30 - 17:30",
+                coach: "Rizki Firmansyah, S.Pd",
+                prestasi: "Juara 1 Futsal Competition 2024",
+                description: "Latihan teknik futsal, fisik, dan strategi permainan.",
+                fullDescription: "Tim Futsal SMK Al-Hikmah merupakan salah satu tim terkuat di wilayah Lampung Tengah. Latihan rutin fokus pada teknik, fisik, dan kerjasama tim. Prestasi gemilang: Juara 1 dalam Futsal Competition tingkat Provinsi tahun 2024."
+            },
+            {
+                id: 7,
+                name: "Tari Tradisional",
+                category: "seni",
+                photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_9FhkMYCr28JaPcwfz4nNp6VXWLkQLb_dKQ&s",
+                schedule: "Sabtu, 10:00 - 12:00",
+                coach: "Sari Dewi, S.Sn",
+                prestasi: "Juara 1 Lomba Tari Nusantara",
+                description: "Pelestarian seni tari tradisional Indonesia. Latihan berbagai tarian daerah.",
+                fullDescription: "Ekskul Tari Tradisional bertujuan melestarikan budaya Indonesia melalui seni tari. Anggota mempelajari berbagai tarian daerah seperti Tari Saman, Tari Piring, dan Tari Gending Sriwijaya. Prestasi: Juara 1 Lomba Tari Nusantara tingkat Kabupaten."
+            },
+            {
+                id: 8,
+                name: "Design Grafis",
+                category: "teknologi",
+                photo: "https://sekolahputrapertiwi.sch.id/wp-content/uploads/2025/01/WhatsApp-Image-2025-01-27-at-11.15.50-1100x600.jpeg",
+                schedule: "Senin & Rabu, 14:00 - 16:00",
+                coach: "Andi Wijaya, S.Kom",
+                prestasi: "Juara 1 Desain Poster Nasional",
+                description: "Pelatihan desain grafis menggunakan software profesional.",
+                fullDescription: "Ekstrakurikuler Desain Grafis membekali siswa dengan keterampilan desain menggunakan Adobe Photoshop, Illustrator, dan CorelDraw. Prestasi: Juara 1 Lomba Desain Poster tingkat Nasional tahun 2024."
+            },
+            {
+                id: 9,
+                name: "Band & Musik",
+                category: "seni",
+                photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0y5O0o1YENvD3KEI-HfkC83C_cmfV89-tnA&s",
+                schedule: "Selasa & Kamis, 15:00 - 17:00",
+                coach: "Rudi Hartono, S.Sn",
+                prestasi: "Juara Favorit Band Competition",
+                description: "Pengembangan bakat musik, vokal, dan performa panggung.",
+                fullDescription: "Ekskul Band melatih siswa dalam berbagai instrumen musik (gitar, drum, keyboard, bass) dan vokal. Tim band aktif mengisi acara sekolah dan perlombaan. Prestasi: Juara Favorit dalam Band Competition tingkat Provinsi."
+            },
+            {
+                id: 10,
+                name: "Paduan Suara",
+                category: "seni",
+                photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAdud80SMyIEhxWUEc1BlLnJFKmaGqM66Mxw&s",
+                schedule: "Jumat, 14:00 - 16:00",
+                coach: "Maria Ulfah, S.Pd",
+                prestasi: "Juara 1 Lomba Paduan Suara",
+                description: "Latihan vokal, harmoni, dan penampilan paduan suara.",
+                fullDescription: "Paduan Suara SMK Al-Hikmah memiliki suara yang harmonis dan sering tampil di berbagai acara. Latihan meliputi teknik vokal, aransemen lagu, dan ekspresi. Prestasi: Juara 1 Lomba Paduan Suara se-Kabupaten Lampung Tengah."
+            },
+            {
+                id: 11,
+                name: "Broadcasting",
+                category: "teknologi",
+                photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtb8J83wKty6pAvejuqon072oYWd8vBOlCHQ&s",
+                schedule: "Kamis, 14:00 - 16:00",
+                coach: "Dian Puspita, S.I.Kom",
+                prestasi: "Juara 1 Vlog Competition",
+                description: "Pelatihan penyiaran, produksi konten, dan jurnalistik.",
+                fullDescription: "Ekskul Broadcasting melatih siswa menjadi content creator, presenter, dan jurnalis cilik. Anggota belajar produksi video, editing, dan teknik wawancara. Prestasi: Juara 1 Vlog Competition tingkat Provinsi."
+            },
+            {
+                id: 12,
+                name: "Fotografi",
+                category: "teknologi",
+                photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxL7CIZ8ogEQ4cp8GfSyKkX2RHLXE0xW8Hfg&s",
+                schedule: "Rabu, 14:00 - 16:00",
+                coach: "Bambang Setiawan, S.Sn",
+                prestasi: "Juara 1 Lomba Foto Prestasi",
+                description: "Pelatihan teknik fotografi, komposisi, dan editing foto.",
+                fullDescription: "Ekskul Fotografi membekali siswa dengan keterampilan memotret dan mengedit foto. Anggota belajar komposisi, pencahayaan, dan teknik editing. Prestasi: Juara 1 Lomba Foto Prestasi tingkat Kabupaten."
+            }
+        ];
+
+        let currentFilter = "all";
+        let currentModalData = null;
+
+        function renderEkskul() {
+            const filtered = currentFilter === "all" 
+                ? ekskulData 
+                : ekskulData.filter(item => item.category === currentFilter);
+            
+            const container = document.getElementById("ekskulContainer");
+            container.innerHTML = "";
+            
+            filtered.forEach(ekskul => {
+                const card = document.createElement("div");
+                card.className = "ekskul-card";
+                card.onclick = () => showDetail(ekskul);
+                
+                card.innerHTML = `
+                    <div class="ekskul-image">
+                        <img src="${ekskul.photo}" alt="${ekskul.name}">
+                        <div class="ekskul-badge">${getCategoryLabel(ekskul.category)}</div>
+                    </div>
+                    <div class="ekskul-content">
+                        <h3>${ekskul.name}</h3>
+                        <div class="ekskul-meta">
+                            <span><i class="fas fa-calendar-alt"></i> ${ekskul.schedule}</span>
+                            <span><i class="fas fa-chalkboard-user"></i> ${ekskul.coach.split(" ")[0]}</span>
+                        </div>
+                        <p class="ekskul-desc">${ekskul.description.substring(0, 100)}${ekskul.description.length > 100 ? '...' : ''}</p>
+                        <div class="ekskul-footer">
+                            <span class="prestasi-icon"><i class="fas fa-trophy"></i> ${ekskul.prestasi.substring(0, 30)}${ekskul.prestasi.length > 30 ? '...' : ''}</span>
+                            <button class="btn-detail" onclick="event.stopPropagation(); showDetail(${JSON.stringify(ekskul).replace(/"/g, '&quot;')})">Detail <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function getCategoryLabel(category) {
+            const labels = {
+                'olahraga': '🏆 Olahraga',
+                'seni': '🎨 Seni & Budaya',
+                'keagamaan': '🕌 Keagamaan',
+                'teknologi': '💻 Teknologi'
+            };
+            return labels[category] || category;
+        }
+        
+        function showDetail(ekskul) {
+            const modal = document.getElementById("ekskulModal");
+            const modalBody = document.getElementById("modalBody");
+            
+            modalBody.innerHTML = `
+                <img src="${ekskul.photo}" alt="${ekskul.name}">
+                <h3>${ekskul.name}</h3>
+                <div class="modal-info">
+                    <span><i class="fas fa-calendar-alt"></i> ${ekskul.schedule}</span>
+                    <span><i class="fas fa-chalkboard-user"></i> ${ekskul.coach}</span>
+                </div>
+                <div class="modal-info">
+                    <span><i class="fas fa-tag"></i> ${getCategoryLabel(ekskul.category)}</span>
+                    <span><i class="fas fa-trophy" style="color:#ffd700;"></i> ${ekskul.prestasi}</span>
+                </div>
+                <hr style="margin: 15px 0;">
+                <h4>📝 Deskripsi Lengkap</h4>
+                <p style="margin-top: 10px; line-height: 1.8;">${ekskul.fullDescription}</p>
+                <hr style="margin: 15px 0;">
+                <h4>🎯 Manfaat Mengikuti:</h4>
+                <ul style="margin-top: 10px; margin-left: 20px; color: #666;">
+                    <li>Mengembangkan bakat dan minat</li>
+                    <li>Meningkatkan prestasi non-akademik</li>
+                    <li>Memperluas relasi pertemanan</li>
+                    <li>Membangun karakter dan kedisiplinan</li>
+                </ul>
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="btn-detail" onclick="closeModal()">Tutup</button>
+                </div>
+            `;
+            
+            modal.classList.add("active");
+        }
+        
+        function closeModal() {
+            document.getElementById("ekskulModal").classList.remove("active");
+        }
+        
+        // Background Manager
+        const bgContainer = document.getElementById('bgContainer');
+        const bgOptions = document.querySelectorAll('.bg-option');
+        const bgImages = [
+            '#f8f9fa',
+            '#e8f4f8',
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+        ];
+        
+        function changeBackground(index) {
+            bgContainer.style.background = bgImages[index];
+        }
+        
+        bgOptions.forEach((option, idx) => {
+            option.addEventListener('click', () => {
+                bgOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                changeBackground(idx);
+            });
+        });
+        
+        // Event Listeners
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                currentFilter = btn.getAttribute("data-filter");
+                renderEkskul();
+            });
+        });
+        
+        document.querySelector(".modal-close")?.addEventListener("click", closeModal);
+        document.getElementById("ekskulModal")?.addEventListener("click", (e) => {
+            if (e.target === document.getElementById("ekskulModal")) closeModal();
+        });
+        
+        // Initial render
+        renderEkskul();
+    </script>
+</body>
+</html>

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang Kami - Sambutan Kepala Sekolah | SMK Al-Hikmah Kalirejo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        /* Background Manager */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            transition: all 0.5s ease;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.94);
+            z-index: -1;
+        }
+
+        /* Background Control Panel */
+        .bg-control-panel {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: flex;
+            gap: 8px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .bg-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .bg-option.active {
+            border-color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(26, 77, 140, 0.95);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+
+        .logo h1 i {
+            color: #ffd700;
+            margin-right: 8px;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffd700;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 100%;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #1a4d8c, #0e2d52);
+            color: #fff;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: #e9ecef;
+            padding: 12px 0;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb a {
+            color: #1a4d8c;
+            text-decoration: none;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 60px 0;
+        }
+
+        .welcome-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .welcome-header {
+            background: linear-gradient(135deg, #1a4d8c, #0e2d52);
+            color: #fff;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .welcome-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .welcome-content {
+            padding: 40px;
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .kepsek-photo {
+            flex: 0 0 280px;
+            text-align: center;
+        }
+
+        .kepsek-photo img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .kepsek-photo img:hover {
+            transform: scale(1.02);
+        }
+
+        .kepsek-name {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #1a4d8c;
+        }
+
+        .kepsek-title {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .sambutan-text {
+            flex: 1;
+        }
+
+        .sambutan-text p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .signature {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #ffd700;
+            font-style: italic;
+        }
+
+        /* Visi Misi Section */
+        .visimisi-section {
+            background: #e9ecef;
+            padding: 60px 0;
+            border-radius: 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2rem;
+            color: #1a4d8c;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            border-radius: 2px;
+        }
+
+        .visi-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 35px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #ffd700;
+        }
+
+        .visi-card i {
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .visi-card h3 {
+            color: #1a4d8c;
+            margin-bottom: 15px;
+        }
+
+        .misi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .misi-item {
+            background: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .misi-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .misi-number {
+            width: 40px;
+            height: 40px;
+            background: #ffd700;
+            color: #1a4d8c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .misi-text h4 {
+            color: #1a4d8c;
+            margin-bottom: 8px;
+        }
+
+        .misi-text p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Prestasi Section */
+        .prestasi-section {
+            padding: 60px 0;
+        }
+
+        .prestasi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .prestasi-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .prestasi-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .prestasi-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .prestasi-icon i {
+            font-size: 2rem;
+            color: #1a4d8c;
+        }
+
+        .prestasi-card h3 {
+            font-size: 2rem;
+            color: #1a4d8c;
+            margin-bottom: 5px;
+        }
+
+        .prestasi-card p {
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 40px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .footer-section p {
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .footer-section a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            color: #ffd700;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #ffd700;
+            color: #1a4d8c;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            nav ul {
+                justify-content: center;
+            }
+            .welcome-content {
+                flex-direction: column;
+                text-align: center;
+                padding: 25px;
+            }
+            .kepsek-photo {
+                flex: none;
+                max-width: 250px;
+                margin: 0 auto;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .misi-item {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+            .bg-control-panel {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Manager -->
+    <div class="bg-container" id="bgContainer"></div>
+    <div class="bg-overlay"></div>
+    
+    <!-- Background Control Panel -->
+    <div class="bg-control-panel">
+        <div class="bg-option active" data-bg="1" style="background: #f8f9fa;"></div>
+        <div class="bg-option" data-bg="2" style="background: #e8f4f8;"></div>
+        <div class="bg-option" data-bg="3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+        <div class="bg-option" data-bg="4" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+    </div>
+
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <h1><i class="fas fa-school"></i> SMK AL-HIKMAH</h1>
+                <p>Berdiri Kuat, Melayani dengan Hati | Terakreditasi B</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="acara.html">Acara</a></li>
+                    <li><a href="artikel.html">Artikel</a></li>
+                    <li><a href="sambutan-kepsek.html" class="active">Tentang Kami</a></li>
+                    <li><a href="foto.html">Galeri</a></li>
+                    <li><a href="kontak.html">Kontak</a></li>
+                    <li><a href="ekstrakurikuler.html">Ekstrakurikuler</a></li>
+                    <li><a href="#"><i class="fas fa-vote-yea"></i> E-VOTING</a></li>
+                    <li><a href="#"><i class="fas fa-graduation-cap"></i> KELULUSAN 2026</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-user-tie"></i> Tentang Kami</h1>
+            <p>Mengenal lebih dekat SMK Al-Hikmah Kalirejo</p>
+        </div>
+    </section>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="index.html">Home</a> / <a href="#">Tentang Kami</a> / <span style="color:#1a4d8c;">Sambutan Kepala Sekolah</span>
+        </div>
+    </div>
+
+    <section class="about-section">
+        <div class="container">
+            <div class="welcome-card">
+                <div class="welcome-header">
+                    <h2><i class="fas fa-hand-peace"></i> Sambutan Kepala Sekolah</h2>
+                    <p>Selamat datang di website resmi SMK Al-Hikmah Kalirejo</p>
+                </div>
+                <div class="welcome-content">
+                    <div class="kepsek-photo">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300" alt="Kepala Sekolah" id="kepsekPhoto">
+                        <div class="kepsek-name">Drs. H. Ahmad Fauzi, M.Pd</div>
+                        <div class="kepsek-title">Kepala SMK Al-Hikmah Kalirejo</div>
+                    </div>
+                    <div class="sambutan-text">
+                        <p><i class="fas fa-quote-left" style="color: #ffd700; margin-right: 10px;"></i> <strong>Assalamu'alaikum Warahmatullahi Wabarakatuh,</strong></p>
+                        <p>Puji syukur kehadirat Allah SWT, atas rahmat dan karunia-Nya, SMK Al-Hikmah Kalirejo terus berkomitmen untuk mencetak lulusan yang kompeten, berakhlak mulia, dan siap bersaing di dunia kerja. Sebagai sekolah kejuruan favorit di Kabupaten Lampung Tengah, kami memiliki fasilitas bengkel modern, laboratorium komputer terkini, dan tenaga pendidik profesional yang berpengalaman di bidangnya.</p>
+                        <p>Kami percaya bahwa setiap siswa memiliki potensi luar biasa yang perlu dikembangkan. Melalui kurikulum berbasis industri dan pengembangan karakter yang kuat, kami siap membimbing siswa menjadi generasi unggul yang tidak hanya cakap secara teknis, tetapi juga memiliki integritas dan jiwa kepemimpinan.</p>
+                        <p>Mari bergabung menjadi bagian dari keluarga besar SMK Al-Hikmah. Bersama kita wujudkan generasi unggul yang siap membangun masa depan Indonesia yang lebih cerah.</p>
+                        <div class="signature">
+                            <p><strong>Wassalamu'alaikum Wr. Wb.</strong></p>
+                            <p style="margin-top: 20px;"><strong>Drs. H. Ahmad Fauzi, M.Pd</strong><br>Kepala SMK Al-Hikmah Kalirejo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visi Misi Section -->
+    <section class="visimisi-section">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-bullseye"></i> Visi & Misi</h2>
+            
+            <div class="visi-card">
+                <i class="fas fa-eye"></i>
+                <h3>VISI</h3>
+                <p>"Menjadi SMK unggulan yang menghasilkan lulusan beriman, bertaqwa, berkarakter, kompeten, dan siap bersaing di era global"</p>
+            </div>
+            
+            <h3 style="text-align: center; margin: 40px 0 20px; color: #1a4d8c;"><i class="fas fa-list-check"></i> MISI KAMI</h3>
+            <div class="misi-grid">
+                <div class="misi-item">
+                    <div class="misi-number">1</div>
+                    <div class="misi-text">
+                        <h4>Meningkatkan Kualitas Pembelajaran</h4>
+                        <p>Mengimplementasikan kurikulum berbasis industri dengan metode pembelajaran aktif, inovatif, dan menyenangkan.</p>
+                    </div>
+                </div>
+                <div class="misi-item">
+                    <div class="misi-number">2</div>
+                    <div class="misi-text">
+                        <h4>Mengembangkan Soft Skill & Karakter</h4>
+                        <p>Membentuk peserta didik yang berakhlak mulia, disiplin, jujur, dan memiliki jiwa kepemimpinan melalui kegiatan ekstrakurikuler.</p>
+                    </div>
+                </div>
+                <div class="misi-item">
+                    <div class="misi-number">3</div>
+                    <div class="misi-text">
+                        <h4>Meningkatkan Kompetensi Lulusan</h4>
+                        <p>Membekali siswa dengan sertifikasi kompetensi sesuai standar industri dan magang di perusahaan mitra.</p>
+                    </div>
+                </div>
+                <div class="misi-item">
+                    <div class="misi-number">4</div>
+                    <div class="misi-text">
+                        <h4>Mengembangkan Sarana & Prasarana</h4>
+                        <p>Menyediakan fasilitas pembelajaran modern yang mendukung proses belajar mengajar yang efektif.</p>
+                    </div>
+                </div>
+                <div class="misi-item">
+                    <div class="misi-number">5</div>
+                    <div class="misi-text">
+                        <h4>Menjalin Kerjasama dengan Dunia Usaha</h4>
+                        <p>Membangun kemitraan dengan perusahaan dan industri untuk penyerapan tenaga kerja lulusan.</p>
+                    </div>
+                </div>
+                <div class="misi-item">
+                    <div class="misi-number">6</div>
+                    <div class="misi-text">
+                        <h4>Meningkatkan Prestasi Akademik & Non-Akademik</h4>
+                        <p>Mendorong siswa untuk berprestasi di berbagai ajang kompetisi tingkat kabupaten, provinsi, maupun nasional.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prestasi Section -->
+    <section class="prestasi-section">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-trophy"></i> Prestasi Sekolah</h2>
+            <div class="prestasi-grid">
+                <div class="prestasi-card">
+                    <div class="prestasi-icon"><i class="fas fa-medal"></i></div>
+                    <h3>10+</h3>
+                    <p>Juara LKS Tingkat Provinsi</p>
+                </div>
+                <div class="prestasi-card">
+                    <div class="prestasi-icon"><i class="fas fa-award"></i></div>
+                    <h3>Akreditasi B</h3>
+                    <p>Nilai Unggul dari BAN-S/M</p>
+                </div>
+                <div class="prestasi-card">
+                    <div class="prestasi-icon"><i class="fas fa-users"></i></div>
+                    <h3>100%</h3>
+                    <p>Penyerapan Lulusan di Dunia Kerja</p>
+                </div>
+                <div class="prestasi-card">
+                    <div class="prestasi-icon"><i class="fas fa-chalkboard"></i></div>
+                    <h3>15+</h3>
+                    <p>Guru Sertifikasi Profesional</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>SMK Al-Hikmah Kalirejo</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Jl Raya Sridadi KM.05 Kalirejo, Lampung Tengah</p>
+                    <p><i class="fas fa-phone"></i> +62 851-8810-0432</p>
+                    <p><i class="fas fa-envelope"></i> admin@smk-alhikmah-kalirejo.sch.id</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Link Cepat</h4>
+                    <p><a href="acara.html">→ Acara Sekolah</a></p>
+                    <p><a href="artikel.html">→ Artikel & Berita</a></p>
+                    <p><a href="ekstrakurikuler.html">→ Ekstrakurikuler</a></p>
+                    <p><a href="kontak.html">→ Hubungi Kami</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Ikuti Kami</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                    <p style="margin-top: 15px;">Info terbaru follow sosial media kami!</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 SMK Al-Hikmah Kalirejo. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Background Manager
+        const bgContainer = document.getElementById('bgContainer');
+        const bgOptions = document.querySelectorAll('.bg-option');
+        const bgImages = [
+            '#f8f9fa',
+            '#e8f4f8',
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+        ];
+        
+        function changeBackground(index) {
+            bgContainer.style.background = bgImages[index];
+            bgContainer.style.backgroundSize = 'cover';
+        }
+        
+        bgOptions.forEach((option, idx) => {
+            option.addEventListener('click', () => {
+                bgOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                changeBackground(idx);
+            });
+        });
+        
+        // Untuk form kontak (jika ada di halaman lain)
+        const contactForm = document.getElementById('contactForm');
+        if(contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Terima kasih, pesan Anda telah terkirim (simulasi).');
+                contactForm.reset();
+            });
+        }
+    </script>
+</body>
+</html>
